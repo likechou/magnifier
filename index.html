@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>放大镜</title>
+	<style type="text/css">
+		#demo
+		{
+			width:400px;
+			height:255px;
+			position: relative;
+			margin:50px;
+			border: 1px solid #ccc;
+		}
+		#smallBox
+		{
+			position: relative;
+		}
+		#floatBox
+		{
+			width:160px;
+			height:100px;
+			position:absolute;
+			border: 1px solid #ccc;
+			filter:alpha(opacity=50);
+			opacity: 0.5;
+			display: none;
+		}
+		#bigBox
+		{
+			width:400px;
+			height: 300px;
+			border: 1px solid #ccc;
+			position:absolute;
+			top:0;
+			left:500px;
+			display: none;
+			overflow: hidden;
+		}
+		#bigBox img
+		{
+			position: absolute;
+		}
+		#mark
+		{
+			width:400px;
+			height:255px;
+			position: relative;
+			background-color: #ccc;
+			position:absolute;
+			filter: alpha(opacity=0);
+			opacity: 0;
+			z-index: 11;
+		}
+	</style>
+
+</head>
+<body>
+	<div id="demo">
+		<div id="smallBox">
+			<div id="mark"></div>
+			<div id="floatBox">
+			</div>
+			<img src="macbook-small.jpg">
+		</div>
+		<div id="bigBox">
+			<img src="macbook-big.jpg">
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		window.onload=function(){
+			var smallbox = document.getElementById("smallBox");
+			var floatbox =  document.getElementById("floatBox");
+			var demo =  document.getElementById("demo");
+			var bigbox =  document.getElementById("bigBox");
+			var bigimg = bigbox.getElementsByTagName("img")[0];
+			demo.onmouseover=function(){
+				floatbox.style.display="block";
+				bigbox.style.display="block";
+			}
+			demo.onmouseout=function(){
+				floatbox.style.display="none";
+				bigbox.style.display="none";
+			}
+			demo.onmousemove=function(e){
+				var event=e||window.event;
+				var left= event.clientX- demo.offsetLeft-smallbox.offsetLeft-floatbox.offsetWidth/2;
+				var top= event.clientY- demo.offsetTop-smallbox.offsetTop-floatbox.offsetHeight/2;
+				if(left<0)
+					left=0;
+				else if(left>demo.offsetWidth-floatbox.offsetWidth)
+					left=demo.offsetWidth-floatbox.offsetWidth;
+				if(top<0)
+					top=0;
+				else if(top>demo.offsetHeight-floatbox.offsetHeight)
+					top=demo.offsetHeight-floatbox.offsetHeight;
+				floatbox.style.left=left+'px';
+				floatbox.style.top=top+'px';
+				console.log(left);
+				console.log(top);
+				imgleft=left/(demo.offsetWidth-floatbox.offsetWidth);
+				imgtop=top/(demo.offsetHeight-floatbox.offsetHeight);
+				console.log('a'+imgleft);
+				console.log('a'+imgtop);
+				bigimg.style.left = -imgleft*(bigimg.offsetWidth-bigbox.offsetWidth)+'px';
+				bigimg.style.top = -imgtop*(bigimg.offsetHeight-bigbox.offsetHeight)+'px';
+			}
+
+		}
+	</script>
+</body>
+
+</html>
